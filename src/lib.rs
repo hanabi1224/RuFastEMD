@@ -13,20 +13,17 @@ use edge::{Edge};
 
 pub fn distance(signature1:&Signature, signature2:&Signature)->f64{
     let total_feature_count = signature1.get_feature_dimension() + signature2.get_feature_dimension();
-    let mut p = Vec::<f64>::with_capacity(total_feature_count);
+    let mut p = vec! [0 as f64;total_feature_count];
     for i in 0..signature1.get_feature_dimension(){
         p[i] = signature1.weights[i];
     }
 
-    let mut q = Vec::<f64>::with_capacity(total_feature_count);
+    let mut q = vec! [0 as f64;total_feature_count];
     for i in 0..signature2.get_feature_dimension(){
         q[signature1.get_feature_dimension() + i] = signature2.weights[i];
     }
 
-    let mut c = Vec::<Vec<f64>>::with_capacity(total_feature_count);
-    for i in 0..total_feature_count{
-        c[i] = Vec::<f64>::with_capacity(total_feature_count);
-    }
+    let mut c = vec! [vec![0 as f64;total_feature_count];total_feature_count];
 
     let mut max_dist:f64 = 0.0;
     for i in 0..signature1.get_feature_dimension(){
@@ -50,12 +47,9 @@ pub fn distance(signature1:&Signature, signature2:&Signature)->f64{
 fn emd_hat(p:Vec<f64>,q:Vec<f64>,c:Vec<Vec<f64>>,max_c:f64)->f64{
     const MULT_FACTOR:f64 = 1000000.0;
     let n = p.len();
-    let mut ip:Vec<i64> = Vec::with_capacity(n);
-    let mut iq:Vec<i64> = Vec::with_capacity(n);
-    let mut ic:Vec<Vec<i64>> = Vec::with_capacity(n);
-    for i in 0..n{
-        ic[i] = Vec::<i64>::with_capacity(n);
-    }
+    let mut ip:Vec<i64> = vec![0 as i64;n];
+    let mut iq:Vec<i64> = vec![0 as i64;n];
+    let mut ic:Vec<Vec<i64>> = vec! [vec![0 as i64;n];n];
 
     let sum_p:f64 = p.iter().sum();
     let sum_q:f64 = q.iter().sum();
@@ -107,7 +101,7 @@ fn emd_hat_impl_i64(pc:Vec<i64>, qc:Vec<i64>, c:Vec<Vec<i64>>, max_c:i64)->i64{
         abs_diff_sum_p_sum_q = sum_p - sum_q;
     }
 
-    let mut b:Vec<i64> = Vec::with_capacity(2 * n + 2);
+    let mut b:Vec<i64> = vec![0 as i64;2 * n + 2];
     let threshold_index = 2 * n;
     let artificial_index = threshold_index + 1;
 
@@ -126,10 +120,7 @@ fn emd_hat_impl_i64(pc:Vec<i64>, qc:Vec<i64>, c:Vec<Vec<i64>>, max_c:i64)->i64{
     let mut sinks_that_get_flow_not_only_from_thresh = HashSet::<usize>::new();
 
     let mut pre_flow_cost:i64=0;
-    let mut _c = Vec::<Vec<Edge>>::with_capacity(b.len());
-    for i in 0.._c.len(){
-        _c[i] = Vec::<Edge>::new();
-    }
+    let mut _c = vec! [Vec::<Edge>::new();b.len()];
 
     for i in 0..n{
         if b[i] == 0{
@@ -191,12 +182,8 @@ fn emd_hat_impl_i64(pc:Vec<i64>, qc:Vec<i64>, c:Vec<Vec<i64>>, max_c:i64)->i64{
     // and vertexes that are connected only to the
     // threshold vertex
     // using None as a special flag !!!
-    let mut nodes_new_indices = Vec::<Option<usize>>::with_capacity(b.len());
-    let mut nodes_old_indices = Vec::<usize>::with_capacity(b.len());
-    for i in 0..nodes_new_indices.len(){
-        nodes_new_indices[i] = None;
-        nodes_old_indices[i] = 0;
-    }
+    let mut nodes_new_indices = vec![None;b.len()];
+    let mut nodes_old_indices = vec![0;b.len()];
 
     let mut current_index:usize = 0;
     for i in 0..2*n{
@@ -226,7 +213,7 @@ fn emd_hat_impl_i64(pc:Vec<i64>, qc:Vec<i64>, c:Vec<Vec<i64>>, max_c:i64)->i64{
     nodes_old_indices.push(artificial_index);
     current_index += 1;
 
-    let mut bb = Vec::<i64>::with_capacity(current_index);
+    let mut bb = vec![0;current_index];
     let mut j:usize = 0;
     for i in 0..b.len(){
         match nodes_new_indices[i] {
@@ -238,10 +225,7 @@ fn emd_hat_impl_i64(pc:Vec<i64>, qc:Vec<i64>, c:Vec<Vec<i64>>, max_c:i64)->i64{
         j += 1;
     }
 
-    let mut cc = Vec::<Vec<Edge>>::with_capacity(bb.len());
-    for i in 0..cc.len(){
-        cc[i] = Vec::<Edge>::new();
-    }
+    let mut cc = vec![Vec::<Edge>::new();bb.len()];
 
     for i in 0.._c.len(){
         match nodes_new_indices[i] {
