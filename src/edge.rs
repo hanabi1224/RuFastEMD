@@ -1,26 +1,35 @@
 pub struct Edge{
-    to:i32,
-    cost:i64,
+    pub to:usize,
+    pub cost:i64,
 }
 
 pub struct Edge0{
-    to:i32,
-    cost:i64,
-    flow:i64,
+    pub to:usize,
+    pub cost:i64,
+    pub flow:i64,
 }
 
 pub struct Edge1{
-    to:i32,
-    reducedCost:i64,
+    pub to:usize,
+    pub reduced_cost:i64,
 }
 
 pub struct Edge2{
-    to:i32,
-    reducedCost:i64,
-    residualCapacity: i64,
+    pub to:usize,
+    pub reduced_cost:i64,
+    pub residual_capacity: i64,
 }
 
 pub struct Edge3{
-    to:i32,
-    distance:i64,
+    pub to:usize,
+    pub distance:i64,
+}
+
+impl Edge3{
+    pub fn new()->Edge3{
+        return Edge3{
+            to:0,
+            distance:0,
+        }
+    }
 }

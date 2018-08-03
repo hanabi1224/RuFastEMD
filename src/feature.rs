@@ -5,7 +5,7 @@ pub struct Feature{
 }
 
 impl Feature{
-    fn ground_distance(&self, other:Feature)->f64{
+    pub fn ground_distance(&self, other:&Feature)->f64{
         let mut result:f64 = 0.0;
         for i in 0..self.array.len(){
             let diff = self.array[i] - other.array[i];
