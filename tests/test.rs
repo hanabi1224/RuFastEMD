@@ -5,7 +5,7 @@ mod tests {
     use self::ru_fastemd::Signature;
     use self::ru_fastemd::Feature;
 
-    use std::vec::Vec;
+    //use std::vec::Vec;
 
     #[test]
     fn sanity_tests() {
@@ -43,10 +43,12 @@ mod tests {
         };
 
         let dist = fastemd_distance(&sig1, &sig2);
-        assert_eq!(dist, 160.54277);
+        assert_eq!(dist, 160.5427069837236);
     }
 
+    /*
     fn verify(left:&Vec<f64>, right:&Vec<f64>, expected:f64){
         unimplemented!()
     }
+    */
 }

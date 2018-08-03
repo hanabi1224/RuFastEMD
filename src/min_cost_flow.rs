@@ -5,10 +5,8 @@ use edge::{Edge,Edge0,Edge1,Edge2,Edge3};
 pub fn compute(e:&mut Vec<i64>, c:&Vec<Vec<Edge>>)->i64{
     let node_count = e.len();
 
-    let mut x = Vec::<Vec<Edge0>>::with_capacity(node_count);
-    for i in 0..x.len(){
-        x[i] = Vec::<Edge0>::new();
-    }
+    let mut x = vec![Vec::<Edge0>::new();node_count];
+
     for from in 0..node_count{
         for edge in &c[from]{
             x[from].push(Edge0{
@@ -26,19 +24,13 @@ pub fn compute(e:&mut Vec<i64>, c:&Vec<Vec<Edge>>)->i64{
 
     // reduced costs for forward edges (c[i,j]-pi[i]+pi[j])
     // Note that for forward edges the residual capacity is infinity
-    let mut r_cost_forward = Vec::<Vec<Edge1>>::with_capacity(node_count);
-    for i in 0..node_count{
-        r_cost_forward[i] = Vec::<Edge1>::new();
-    }
+    let mut r_cost_forward = vec![Vec::<Edge1>::new();node_count];
 
     // reduced costs and capacity for backward edges
     // (c[j,i]-pi[j]+pi[i])
     // Since the flow at the beginning is 0, the residual capacity is
     // also zero
-    let mut r_cost_cap_backward = Vec::<Vec<Edge2>>::with_capacity(node_count);
-    for i in 0..node_count{
-        r_cost_cap_backward[i] = Vec::<Edge2>::new();
-    }
+    let mut r_cost_cap_backward = vec![Vec::<Edge2>::new();node_count];
 
     for from in 0..node_count{
         for edge in &c[from]{
@@ -54,8 +46,8 @@ pub fn compute(e:&mut Vec<i64>, c:&Vec<Vec<Edge>>)->i64{
         }
     }
 
-    let mut d = Vec::<i64>::with_capacity(node_count);
-    let mut prev = Vec::<usize>::with_capacity(node_count);
+    let mut d = vec![0;node_count];
+    let mut prev = vec![0;node_count];
 
     let mut delta:i64;
     loop{
@@ -74,7 +66,8 @@ pub fn compute(e:&mut Vec<i64>, c:&Vec<Vec<Edge>>)->i64{
 
         delta = max_supply;
 
-        let mut l = Vec::<usize>::with_capacity(1);
+        let mut l = vec![0;1 as usize];
+
         compute_shortest_path(&mut d, &mut prev, k, &mut r_cost_forward, &mut r_cost_cap_backward, &e, &mut l);
 
         // find delta (minimum on the path from k to l)
@@ -83,7 +76,6 @@ pub fn compute(e:&mut Vec<i64>, c:&Vec<Vec<Edge>>)->i64{
         let mut to = l[0];
         loop{
             let from = prev[to];
-
             // residual
             let mut itccb = 0;
             while itccb < r_cost_cap_backward[from].len()
@@ -108,7 +100,6 @@ pub fn compute(e:&mut Vec<i64>, c:&Vec<Vec<Edge>>)->i64{
         to = l[0];
         loop{
             let from = prev[to];
-
             // TODO - might do here O(n) can be done in O(1)
             let mut itx = 0;
             while x[from][itx].to != to{
@@ -128,7 +119,7 @@ pub fn compute(e:&mut Vec<i64>, c:&Vec<Vec<Edge>>)->i64{
                 r_cost_cap_backward[to][itccb].residual_capacity += delta;
             }
 
-            itccb = 0;
+            let mut itccb = 0;
             while itccb < r_cost_cap_backward[from].len()
                 && r_cost_cap_backward[from][itccb].to != to {
                 itccb += 1;
@@ -140,7 +131,7 @@ pub fn compute(e:&mut Vec<i64>, c:&Vec<Vec<Edge>>)->i64{
 
             // update e
             e[to] += delta;
-            e[from] += delta;
+            e[from] -= delta;
 
             to = from;
 
@@ -170,11 +161,8 @@ fn compute_shortest_path(
     e:&Vec<i64>,
     l:&mut Vec<usize>)->(){
     let node_count = e.len();
-    let mut nodes_to_q = Vec::<usize>::with_capacity(node_count);
-    let mut q = Vec::<Edge3>::with_capacity(node_count);
-    for i in 0..node_count{
-        q[i] = Edge3::new();
-    }
+    let mut nodes_to_q = vec![0;node_count];
+    let mut q = vec![Edge3::new();node_count];
 
     q[0].to = from;
 
@@ -193,7 +181,7 @@ fn compute_shortest_path(
         j += 1;
     }
 
-    let mut final_nodes_flag = Vec::<bool>::with_capacity(node_count);
+    let mut final_nodes_flag = vec![false;node_count];
     loop{
         let u = q[0].to;
         d[u] = q[0].distance;
@@ -222,6 +210,7 @@ fn compute_shortest_path(
                 if nodes_to_q[v] < q.len()
                     && alt < q[nodes_to_q[v]].distance{
                     heap_decrease_key(&mut q, &mut nodes_to_q, v, alt);
+                    prev[v] = u;
                 }
             }
         }
@@ -238,7 +227,7 @@ fn compute_shortest_path(
             }
 
             if final_nodes_flag[edge.to]{
-                edge.reduced_cost -= d[_from] - d[l[0]];
+                edge.reduced_cost -= d[edge.to] - d[l[0]];
             }
         }
 
@@ -248,7 +237,7 @@ fn compute_shortest_path(
             }
 
             if final_nodes_flag[edge.to]{
-                edge.reduced_cost -= d[_from] - d[l[0]];
+                edge.reduced_cost -= d[edge.to] - d[l[0]];
             }
         }
     }
@@ -315,5 +304,9 @@ fn right(i:usize)->usize{
 }
 
 fn parent(i:usize)->usize{
+    if i < 1{
+        return 0;
+    }
+
     return (i - 1) / 2;
 }
