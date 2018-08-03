@@ -4,13 +4,14 @@ mod signature;
 mod min_cost_flow;
 
 pub use signature::Signature;
+pub use feature::Feature;
 
 use std::vec::Vec;
 use std::collections::HashSet;
 use edge::{Edge};
 
 
-pub fn distance(signature1:Signature, signature2:Signature)->f64{
+pub fn distance(signature1:&Signature, signature2:&Signature)->f64{
     let total_feature_count = signature1.get_feature_dimension() + signature2.get_feature_dimension();
     let mut p = Vec::<f64>::with_capacity(total_feature_count);
     for i in 0..signature1.get_feature_dimension(){
