@@ -1,8 +1,16 @@
+#![deny(warnings)]
+
+#[macro_use]
+mod macros;
 mod feature;
 mod edge;
 mod signature;
 mod min_cost_flow;
+mod c_ffi;
 
+extern crate libc;
+
+pub use c_ffi::*;
 pub use signature::Signature;
 pub use feature::Feature;
 

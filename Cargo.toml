@@ -9,6 +9,7 @@ A rust implementation of fast emd algrithm
 """
 
 [dependencies]
+libc = "0.2"
 
 
 [lib]
