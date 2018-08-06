@@ -64,7 +64,7 @@ mod tests {
             Box::leak(Box::from([50.0, 100.0, 80.0])).as_ptr(),
             Box::leak(Box::from([255.0, 255.0, 255.0])).as_ptr(),
         ])).as_ptr();
-        let weights2_ptr = Box::leak(Box::from([0.5, 0.3, 0.2]).as_ptr();
+        let weights2_ptr = Box::leak(Box::from([0.5, 0.3, 0.2])).as_ptr();
 
         let sig1= create_signature(features1_ptr, weights1_ptr, 4, 3);
         let sig2= create_signature(features2_ptr, weights2_ptr, 3, 3);
