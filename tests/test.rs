@@ -51,20 +51,20 @@ mod tests {
 
     #[test]
     fn c_ffi_sanity_tests(){
-        let features1_ptr = Box::into_raw(Box::from([
-            Box::into_raw(Box::from([100.0, 40.0, 22.0])) as *const f64,
-            Box::into_raw(Box::from([211.0, 20.0, 2.0]))as *const f64,
-            Box::into_raw(Box::from([32.0, 190.0, 150.0]))as *const f64,
-            Box::into_raw(Box::from([2.0, 100.0, 100.0]))as *const f64,
-        ])) as *const *const f64;
-        let weights1_ptr = Box::into_raw(Box::from([0.4, 0.3, 0.2, 0.1])) as *const f64;
+        let features1_ptr = Box::leak(Box::from([
+            Box::leak(Box::from([100.0, 40.0, 22.0])).as_ptr(),
+            Box::leak(Box::from([211.0, 20.0, 2.0])).as_ptr(),
+            Box::leak(Box::from([32.0, 190.0, 150.0])).as_ptr(),
+            Box::leak(Box::from([2.0, 100.0, 100.0])).as_ptr(),
+        ])).as_ptr();
+        let weights1_ptr = Box::leak(Box::from([0.4, 0.3, 0.2, 0.1])).as_ptr();
 
-        let features2_ptr = Box::into_raw(Box::from([
-            Box::into_raw(Box::from([0.0, 0.0, 0.0])) as *const f64,
-            Box::into_raw(Box::from([50.0, 100.0, 80.0])) as *const f64,
-            Box::into_raw(Box::from([255.0, 255.0, 255.0])) as *const f64,
-        ])) as *const *const f64;
-        let weights2_ptr = Box::into_raw(Box::from([0.5, 0.3, 0.2])) as *const f64;
+        let features2_ptr = Box::leak(Box::from([
+            Box::leak(Box::from([0.0, 0.0, 0.0])).as_ptr(),
+            Box::leak(Box::from([50.0, 100.0, 80.0])).as_ptr(),
+            Box::leak(Box::from([255.0, 255.0, 255.0])).as_ptr(),
+        ])).as_ptr();
+        let weights2_ptr = Box::leak(Box::from([0.5, 0.3, 0.2])).as_ptr();
 
         let sig1= create_signature(features1_ptr, weights1_ptr, 4, 3);
         let sig2= create_signature(features2_ptr, weights2_ptr, 3, 3);
