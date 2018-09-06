@@ -2,13 +2,12 @@ image:
   - Visual Studio 2017
 environment:
   matrix:
-  - TARGET: x86_64-pc-windows-msvc
-  #- TARGET: i686-pc-windows-msvc
-  #- TARGET: i686-pc-windows-gnu
+  - RUST_TOOL_CHAIN: stable
+  #- RUST_TOOL_CHAIN: nightly
 install:
-  - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-nightly-${env:TARGET}.exe"
-  - rust-nightly-%TARGET%.exe /VERYSILENT /NORESTART /DIR="C:\Program Files (x86)\Rust"
-  - SET PATH=C:\Program Files (x86)\Rust\bin;C:\MinGW\bin;%PATH%
+  - ps: Start-FileDownload "https://win.rustup.rs/x86_64" -FileName "rustup-init.exe"
+  - rustup-init.exe -y --default-toolchain %RUST_TOOL_CHAIN%
+  - SET PATH=%USERPROFILE%\.cargo\bin;C:\MinGW\bin;%PATH%
   - rustc -V
   - cargo -V
 build_script:
