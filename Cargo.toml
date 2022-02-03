@@ -1,16 +1,17 @@
 [package]
 name = "ru_fastemd"
 version = "0.1.0"
-authors = ["hanabi1224"]
-license = "MIT"
-repository = "https://github.com/hanabi1224/RuFastEMD"
+
 description = """
 A rust implementation of fast emd algrithm
 """
+repository = "https://github.com/hanabi1224/RuFastEMD"
+
+edition = "2021"
+license = "MIT"
 
 [dependencies]
 libc = "0.2"
-
 
 [lib]
 crate-type = ["lib", "cdylib"]

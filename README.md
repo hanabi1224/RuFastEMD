@@ -1,7 +1,6 @@
 # RuFastEMD
 
-[![Build Status](https://img.shields.io/travis/hanabi1224/RuFastEMD/master.svg)](https://travis-ci.org/hanabi1224/RuFastEMD)
-[![Build status](https://img.shields.io/appveyor/ci/hanabi1224/RuFastEMD/master.svg)](https://ci.appveyor.com/project/hanabi1224/RuFastEMD)
+[![main](https://github.com/hanabi1224/RuFastEMD/actions/workflows/main.yml/badge.svg)](https://github.com/hanabi1224/RuFastEMD/actions/workflows/main.yml)
 [![MIT License](https://img.shields.io/github/license/hanabi1224/RuFastEMD.svg)](https://github.com/hanabi1224/RuAnnoy/blob/master/RuFastEMD)
 ========
 
